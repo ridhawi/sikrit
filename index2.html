@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyuzen Studio - Harga & Paket</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --purple: #8B5CF6;
+            --pink: #EC4899;
+            --blue: #3B82F6;
+            --dark: #0F0A1E;
+            --darker: #070512;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--darker);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Syne', sans-serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 50%, var(--blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 50%, var(--blue) 100%);
+        }
+
+        .gradient-border {
+            position: relative;
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid transparent;
+        }
+
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--purple), var(--pink), var(--blue));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        .bg-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+        }
+
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        .section-number {
+            font-size: 180px;
+            font-weight: 800;
+            opacity: 0.03;
+            position: absolute;
+            top: -60px;
+            left: 0;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .pricing-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(139, 92, 246, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .pricing-card:hover::after {
+            opacity: 1;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            border-radius: 0 0 12px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.5);
+        }
+
+        .price-tag {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .detail-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-item:hover {
+            padding-left: 8px;
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .check-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .check-icon::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .animate-in {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+
+        @media (max-width: 768px) {
+            .price-tag {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-pattern pt-24 pb-16">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse-glow"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse-glow delay-300"></div>
+            <div class="absolute top-1/2 right-1/3 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse-glow delay-500"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center">
+                <div class="inline-block px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 mb-6">
+                    <span class="text-sm gradient-text font-semibold">💎 Pricing & Packages</span>
+                </div>
+                <h1 class="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                    Harga & <span class="gradient-text">Paket</span>
+                </h1>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Pilih paket yang sesuai dengan kebutuhan project Anda. Semua paket include free design & full support.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jasa Buat/Dekor Map -->
+    <section class="py-20 relative">
+        <div class="section-number">01</div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12 animate-in">
+                <div class="inline-flex items-center gap-3 px-5 py-3 rounded-2xl border border-purple-500/30 bg-purple-500/10 mb-4">
+                    <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                    </svg>
+                    <span class="text-lg font-bold gradient-text">Jasa Buat/Dekor Map</span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <!-- Paket A "Hemat" -->
+                <div class="pricing-card gradient-border rounded-3xl p-8 card-hover animate-in delay-100">
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Paket A</h3>
+                        <p class="text-purple-400 font-semibold">"Hemat"</p>
+                    </div>
+                    <div class="mb-8">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500 text-lg">Rp</span>
+                            <span class="price-tag gradient-text">350K</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3 mb-8">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Map Gunung Ringan Simple, Club Simple, Hangout Simple, Map Simple</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Pengerjaan: 2-3 Hari</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Revisi: 2 kali (Ringan)</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Free Design Logo dan Tumbnail</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Garansi 1 Bulan Development</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Paket%20A%20(Hemat)%20-%20Rp%20350.000*%20untuk%20Jasa%20Buat/Dekor%20Map" target="_blank" class="block w-full px-6 py-4 border-2 border-purple-500/30 rounded-full font-bold hover:bg-purple-500/10 transition-all text-center">
+                        Pilih Paket
+                    </a>
+                </div>
+
+                <!-- Paket B "Standar" (Popular) -->
+                <div class="pricing-card gradient-border rounded-3xl p-8 card-hover relative animate-in delay-200">
+                    <div class="popular-badge">POPULAR</div>
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Paket B</h3>
+                        <p class="text-pink-400 font-semibold">"Standar"</p>
+                    </div>
+                    <div class="mb-8">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500 text-lg">Rp</span>
+                            <span class="price-tag gradient-text">750K</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3 mb-8">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Map Gunung Standar, Club Standar, Hangout Standar, Map Standar</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Pengerjaan: 7-14 Hari</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Revisi: 2 kali (Ringan)</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Free Design Logo dan Tumbnail</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Garansi 1 Bulan Development</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Paket%20B%20(Standar)%20-%20Rp%20750.000*%20untuk%20Jasa%20Buat/Dekor%20Map" target="_blank" class="block w-full px-6 py-4 gradient-bg rounded-full font-bold hover:shadow-xl hover:shadow-purple-500/50 transition-all text-center">
+                        Pilih Paket
+                    </a>
+                </div>
+
+                <!-- Paket C "Customise" -->
+                <div class="pricing-card gradient-border rounded-3xl p-8 card-hover animate-in delay-300">
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Paket C</h3>
+                        <p class="text-blue-400 font-semibold">"Customise"</p>
+                    </div>
+                    <div class="mb-8">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500 text-lg">Rp</span>
+                            <span class="price-tag gradient-text">2.5JT</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3 mb-8">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">All Map Professional</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Pengerjaan: 14-30 Hari</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Revisi: Bebas</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Free Design Logo dan Tumbnail</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm leading-relaxed">Garansi 1 Bulan Development</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Paket%20C%20(Customise)%20-%20Rp%202.500.000*%20untuk%20Jasa%20Buat/Dekor%20Map" target="_blank" class="block w-full px-6 py-4 border-2 border-blue-500/30 rounded-full font-bold hover:bg-blue-500/10 transition-all text-center">
+                        Pilih Paket
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jasa Game Map Security -->
+    <section class="py-20 bg-dark/30 relative">
+        <div class="section-number">02</div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12 animate-in">
+                <div class="inline-flex items-center gap-3 px-5 py-3 rounded-2xl border border-purple-500/30 bg-purple-500/10 mb-4">
+                    <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <span class="text-lg font-bold gradient-text">Jasa Game Map Security</span>
+                </div>
+            </div>
+
+            <div class="max-w-2xl mx-auto">
+                <div class="pricing-card gradient-border rounded-3xl p-8 card-hover animate-in delay-100">
+                    <div class="mb-8">
+                        <h3 class="text-3xl font-bold mb-2">Kyuzen Shield</h3>
+                        <p class="text-purple-400 font-semibold">Security Audit Premium</p>
+                    </div>
+                    <div class="mb-8">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500 text-lg">Rp</span>
+                            <span class="price-tag gradient-text">150K</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3 mb-8">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 leading-relaxed">Cek Backdoor + Hapus Script Virus</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 leading-relaxed">Bonus: Optimasi Lag (Kurangi part count/script usage)</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Kyuzen%20Shield%20-%20Rp%20150.000*%20untuk%20Jasa%20Game%20Map%20Security" target="_blank" class="block w-full px-6 py-4 gradient-bg rounded-full font-bold hover:shadow-xl hover:shadow-purple-500/50 transition-all text-center">
+                        Pilih Paket
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jasa Buat Fitur -->
+    <section class="py-20 relative">
+        <div class="section-number">03</div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12 animate-in">
+                <div class="inline-flex items-center gap-3 px-5 py-3 rounded-2xl border border-purple-500/30 bg-purple-500/10 mb-4">
+                    <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                    </svg>
+                    <span class="text-lg font-bold gradient-text">Jasa Buat Fitur</span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                <!-- Paket Easy -->
+                <div class="pricing-card gradient-border rounded-3xl p-6 card-hover animate-in delay-100">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-2">Paket Easy</h3>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500">Rp</span>
+                            <span class="text-3xl font-bold gradient-text">150K</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 mb-6">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Fitur Simple dan Ringan</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Pengerjaan 24 Jam</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Paket%20Easy%20-%20Rp%20150.000*%20untuk%20Jasa%20Buat%20Fitur" target="_blank" class="block w-full px-4 py-3 border-2 border-purple-500/30 rounded-full text-sm font-bold hover:bg-purple-500/10 transition-all text-center">
+                        Pilih
+                    </a>
+                </div>
+
+                <!-- Paket Medium -->
+                <div class="pricing-card gradient-border rounded-3xl p-6 card-hover animate-in delay-200">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-2">Paket Medium</h3>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500">Rp</span>
+                            <span class="text-3xl font-bold gradient-text">350K</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 mb-6">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Fitur Standar</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Pengerjaan 7 Hari</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Paket%20Medium%20-%20Rp%20350.000*%20untuk%20Jasa%20Buat%20Fitur" target="_blank" class="block w-full px-4 py-3 border-2 border-purple-500/30 rounded-full text-sm font-bold hover:bg-purple-500/10 transition-all text-center">
+                        Pilih
+                    </a>
+                </div>
+
+                <!-- Paket Hard -->
+                <div class="pricing-card gradient-border rounded-3xl p-6 card-hover animate-in delay-300">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-2">Paket Hard</h3>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500">Rp</span>
+                            <span class="text-3xl font-bold gradient-text">500K</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 mb-6">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Fitur Pro</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Pengerjaan 14 Hari</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Paket%20Hard%20-%20Rp%20500.000*%20untuk%20Jasa%20Buat%20Fitur" target="_blank" class="block w-full px-4 py-3 border-2 border-purple-500/30 rounded-full text-sm font-bold hover:bg-purple-500/10 transition-all text-center">
+                        Pilih
+                    </a>
+                </div>
+
+                <!-- Paket Kustom -->
+                <div class="pricing-card gradient-border rounded-3xl p-6 card-hover animate-in delay-400">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-2">Paket Kustom</h3>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500">Rp</span>
+                            <span class="text-3xl font-bold gradient-text">1JT</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 mb-6">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Fitur Kustom Request</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Pengerjaan 30 Hari</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Paket%20Kustom%20-%20Rp%201.000.000*%20untuk%20Jasa%20Buat%20Fitur" target="_blank" class="block w-full px-4 py-3 gradient-bg rounded-full text-sm font-bold hover:shadow-lg hover:shadow-purple-500/50 transition-all text-center">
+                        Pilih
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jasa UGC Design -->
+    <section class="py-20 bg-dark/30 relative">
+        <div class="section-number">04</div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12 animate-in">
+                <div class="inline-flex items-center gap-3 px-5 py-3 rounded-2xl border border-purple-500/30 bg-purple-500/10 mb-4">
+                    <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path>
+                    </svg>
+                    <span class="text-lg font-bold gradient-text">Jasa UGC Design</span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                <!-- Jaket/T-Shirt/Celana/Overall -->
+                <div class="pricing-card gradient-border rounded-3xl p-6 card-hover animate-in delay-100">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold mb-2">Jaket/T-Shirt/Celana/Overall</h3>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500">Rp</span>
+                            <span class="text-3xl font-bold gradient-text">350K</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 mb-6">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Custom Model dari Kyuzen Studio</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Pengerjaan 1 Hari</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Revisi 1 Kali</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Jaket/T-Shirt/Celana/Overall%20-%20Rp%20350.000*%20untuk%20Jasa%20UGC%20Design" target="_blank" class="block w-full px-4 py-3 border-2 border-purple-500/30 rounded-full text-sm font-bold hover:bg-purple-500/10 transition-all text-center">
+                        Pilih
+                    </a>
+                </div>
+
+                <!-- Avatar Item -->
+                <div class="pricing-card gradient-border rounded-3xl p-6 card-hover animate-in delay-200">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold mb-2">Avatar Item</h3>
+                        <p class="text-xs text-gray-500">Aksesoris, Wajah, Tubuh, Animasi, Sepatu</p>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500">Rp</span>
+                            <span class="text-3xl font-bold gradient-text">500K</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 mb-6">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Custom Basic Model dari Kyuzen Studio</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Pengerjaan 1 Hari</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Revisi 1 Kali</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Avatar%20Item%20-%20Rp%20500.000*%20untuk%20Jasa%20UGC%20Design" target="_blank" class="block w-full px-4 py-3 border-2 border-purple-500/30 rounded-full text-sm font-bold hover:bg-purple-500/10 transition-all text-center">
+                        Pilih
+                    </a>
+                </div>
+
+                <!-- Costum -->
+                <div class="pricing-card gradient-border rounded-3xl p-6 card-hover animate-in delay-300">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold mb-2">Costum</h3>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500">Rp</span>
+                            <span class="text-3xl font-bold gradient-text">1.5JT</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 mb-6">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Custom Blender</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Pengerjaan 30 Hari</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Revisi Bebas</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Costum%20-%20Rp%201.500.000*%20untuk%20Jasa%20UGC%20Design" target="_blank" class="block w-full px-4 py-3 gradient-bg rounded-full text-sm font-bold hover:shadow-lg hover:shadow-purple-500/50 transition-all text-center">
+                        Pilih
+                    </a>
+                </div>
+
+                <!-- Baju/Kemeja/Celana Klasik -->
+                <div class="pricing-card gradient-border rounded-3xl p-6 card-hover animate-in delay-400">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold mb-2">Baju/Kemeja/Celana Klasik</h3>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-gray-500">Rp</span>
+                            <span class="text-3xl font-bold gradient-text">50K</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 mb-6">
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Custom</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Pengerjaan 1 Hari</span>
+                        </div>
+                        <div class="detail-item flex items-start">
+                            <div class="check-icon"></div>
+                            <span class="text-gray-300 text-sm">Revisi Bebas</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20tertarik%20dengan%20*Baju/Kemeja/Celana%20Klasik%20-%20Rp%2050.000*%20untuk%20Jasa%20UGC%20Design" target="_blank" class="block w-full px-4 py-3 border-2 border-purple-500/30 rounded-full text-sm font-bold hover:bg-purple-500/10 transition-all text-center">
+                        Pilih
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-32 bg-dark/30 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="inline-block px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 mb-6">
+                    <span class="text-sm gradient-text font-semibold">Masih Bingung?</span>
+                </div>
+                <h2 class="text-5xl lg:text-6xl font-bold mb-6">
+                    Konsultasi<br/>
+                    <span class="gradient-text">Gratis</span>
+                </h2>
+                <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
+                    Belum yakin paket mana yang cocok? Chat kami untuk konsultasi gratis dan dapatkan rekomendasi terbaik!
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="https://wa.me/6281234567890?text=Halo%20Kyuzen%20Studio,%20saya%20ingin%20konsultasi%20tentang%20layanan%20yang%20tersedia" target="_blank" class="px-10 py-5 gradient-bg rounded-full font-bold text-lg hover:shadow-2xl hover:shadow-purple-500/50 transition-all inline-flex items-center gap-3">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                        Konsultasi Sekarang
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.animate-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>

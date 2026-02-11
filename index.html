@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyuzen Studio - Roblox Development</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --purple: #8B5CF6;
+            --pink: #EC4899;
+            --blue: #3B82F6;
+            --dark: #0F0A1E;
+            --darker: #070512;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--darker);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Syne', sans-serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 50%, var(--blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 50%, var(--blue) 100%);
+        }
+
+        .gradient-border {
+            position: relative;
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid transparent;
+        }
+
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--purple), var(--pink), var(--blue));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        .bg-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(15, 10, 30, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-footer {
+            background: rgba(7, 5, 18, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--purple), var(--pink));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        .hero-image {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image:hover {
+            transform: perspective(1000px) rotateY(0deg) scale(1.02);
+        }
+
+        .section-number {
+            font-size: 180px;
+            font-weight: 800;
+            opacity: 0.03;
+            position: absolute;
+            top: -60px;
+            left: 0;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .faq-item {
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding-top: 1rem;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Logo carousel animation */
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .logo-track {
+            animation: scroll-left 30s linear infinite;
+        }
+
+        .logo-track:hover {
+            animation-play-state: paused;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            max-height: 500px;
+        }
+
+        /* Stagger animation delays */
+        .animate-in {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; }
+
+        /* Logo styles */
+        .logo-img {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .footer-logo-img {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header/Navigation with Glassmorphism -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass rounded-b-3xl mx-4 mt-4">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo with Image -->
+                <div class="flex items-center gap-3">
+                    <!-- Ganti URL ini dengan logo Anda -->
+                    <img src="https://i.ibb.co.com/1G7vdrpK/kstdw.png" alt="Kyuzen Studio Logo" class="logo-img rounded-xl">
+                    <span class="text-xl font-bold gradient-text">Kyuzen Studio</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#home" class="nav-link text-gray-300 hover:text-white">Home</a>
+                    <a href="#services" class="nav-link text-gray-300 hover:text-white">Services</a>
+                    <a href="#projects" class="nav-link text-gray-300 hover:text-white">Portfolio</a>
+                    <a href="#faq" class="nav-link text-gray-300 hover:text-white">FAQ</a>
+                    <a href="#index2" class="px-6 py-2.5 gradient-bg rounded-full font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all">Price</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div class="mobile-menu md:hidden" id="mobileMenu">
+                <div class="py-4 space-y-3">
+                    <a href="#home" class="block text-gray-300 hover:text-white py-2">Home</a>
+                    <a href="#services" class="block text-gray-300 hover:text-white py-2">Services</a>
+                    <a href="#projects" class="block text-gray-300 hover:text-white py-2">Portfolio</a>
+                    <a href="#faq" class="block text-gray-300 hover:text-white py-2">FAQ</a>
+                    <a href="#index2" class="block px-6 py-2.5 gradient-bg rounded-full font-semibold text-center">Price</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden bg-pattern pt-32 pb-32">
+        <!-- Animated background elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse-glow"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse-glow delay-300"></div>
+            <div class="absolute top-1/2 right-1/3 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse-glow delay-500"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="text-left animate-in">
+                    <div class="inline-block px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 mb-6">
+                        <span class="text-sm gradient-text font-semibold">✨ Roblox Development</span>
+                    </div>
+                    <h1 class="text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                        Merancang Dunia<br/>
+                        <span class="gradient-text">Virtual Digital</span><br/>
+                        Roblox
+                    </h1>
+                    <p class="text-xl text-gray-400 mb-8 max-w-xl">
+                        Setiap proyek dimulai dengan sebuah cerita. Kami mengubah cerita-cerita itu menjadi pengalaman digital yang terasa mudah dan ekspresif.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#services" class="px-8 py-4 gradient-bg rounded-full font-semibold hover:shadow-xl hover:shadow-purple-500/50 transition-all inline-flex items-center gap-2">
+                            Lihat Layanan
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </a>
+                        <a href="#projects" class="px-8 py-4 border border-white/20 rounded-full font-semibold hover:bg-white/5 transition-all">
+                            Lihat Portfolio
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative animate-in delay-300">
+                    <div class="hero-image relative">
+                        <div class="absolute inset-0 gradient-bg opacity-20 rounded-3xl"></div>
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=800&fit=crop" alt="Hero Image" class="relative z-10 rounded-3xl shadow-2xl w-full">
+                    </div>
+                    <!-- Floating icon -->
+                    <div class="absolute -top-8 -left-8 w-24 h-24 gradient-bg rounded-2xl flex items-center justify-center shadow-xl animate-float">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Sponsor Section -->
+    <section class="py-24 bg-dark/50 relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <p class="text-gray-500 uppercase tracking-wider text-sm font-semibold">Dipercaya Oleh</p>
+            </div>
+            <div class="relative">
+                <div class="flex overflow-hidden">
+                    <div class="logo-track flex gap-16 items-center">
+                        <!-- Ganti URL-URL ini dengan logo sponsor Anda -->
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+1" alt="Sponsor 1" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+2" alt="Sponsor 2" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+3" alt="Sponsor 3" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+4" alt="Sponsor 4" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+5" alt="Sponsor 5" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+6" alt="Sponsor 6" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <!-- Duplicate for seamless loop -->
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+1" alt="Sponsor 1" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+2" alt="Sponsor 2" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+3" alt="Sponsor 3" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+4" alt="Sponsor 4" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+5" alt="Sponsor 5" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                        <img src="https://via.placeholder.com/150x60/444444/FFFFFF?text=Sponsor+6" alt="Sponsor 6" class="h-12 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-32 relative bg-pattern">
+        <div class="section-number">02</div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 mb-4">
+                    <span class="text-sm gradient-text font-semibold">Apa Yang Bisa Kami Bantu</span>
+                </span>
+                <h2 class="text-5xl lg:text-6xl font-bold mb-6">
+                    Layanan <span class="gradient-text">Premium</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Pergerakan menghidupkan desain. Kami menggunakan gerakan untuk mengarahkan perhatian, menciptakan alur, dan menambahkan ritme pada tata letak statis.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Service Card 1 -->
+                <div class="gradient-border rounded-2xl p-8 card-hover group">
+                    <div class="w-16 h-16 gradient-bg rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Jasa Buat/Dekor Map</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Kami menciptakan map yang immersive dan detail dengan perhatian khusus pada gameplay, estetika, dan optimasi performa untuk pengalaman bermain terbaik.
+                    </p>
+                </div>
+
+                <!-- Service Card 2 -->
+                <div class="gradient-border rounded-2xl p-8 card-hover group">
+                    <div class="w-16 h-16 gradient-bg rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Jasa Game Map Security</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Layanan security audit profesional untuk mengidentifikasi dan menghapus backdoor, malicious script, dan vulnerability dalam game Anda dengan detail report.
+                    </p>
+                </div>
+
+                <!-- Service Card 3 -->
+                <div class="gradient-border rounded-2xl p-8 card-hover group">
+                    <div class="w-16 h-16 gradient-bg rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Jasa Buat Fitur</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Development script custom yang efisien dan scalable. Dari gameplay mechanics hingga sistem kompleks, kami code dengan best practices dan dokumentasi lengkap.
+                    </p>
+                </div>
+
+                <!-- Service Card 4 -->
+                <div class="gradient-border rounded-2xl p-8 card-hover group">
+                    <div class="w-16 h-16 gradient-bg rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Jasa Design UGC Roblox</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Implementasi fitur custom yang inovatif dan user-friendly. Dari inventory system hingga quest mechanics, kami transform ide jadi reality.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects/Portfolio Section -->
+    <section id="projects" class="py-32 bg-dark/30 relative">
+        <div class="section-number">03</div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 mb-4">
+                    <span class="text-sm gradient-text font-semibold">Portfolio</span>
+                </span>
+                <h2 class="text-5xl lg:text-6xl font-bold mb-6">
+                    Apa Saja Yang Sudah<br/>
+                    <span class="gradient-text">Kami Buat</span>
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project Card 1 -->
+                <div class="group relative overflow-hidden rounded-2xl bg-dark border border-white/5 card-hover">
+                    <div class="aspect-video overflow-hidden bg-gradient-to-br from-purple-500/20 to-pink-500/20">
+                        <img src="https://i.ibb.co.com/wrwNppvN/ada.png" alt="Project 1" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-3 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full">Party Club</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">America Dorky Arena</h3>
+                        <p class="text-gray-400">Party Club Play, Transfer Cash, Dance, Emote, Shop Tools and Fun.</p>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="group relative overflow-hidden rounded-2xl bg-dark border border-white/5 card-hover">
+                    <div class="aspect-video overflow-hidden bg-gradient-to-br from-blue-500/20 to-purple-500/20">
+                        <img src="https://i.ibb.co.com/prhGqwT6/crossthis.png" alt="Project 2" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full">Simulator</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">CROSS THIS!</h3>
+                        <p class="text-gray-400">Simulation of crossing the road, avoid cars and arrive safely at your destination.</p>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="group relative overflow-hidden rounded-2xl bg-dark border border-white/5 card-hover">
+                    <div class="aspect-video overflow-hidden bg-gradient-to-br from-pink-500/20 to-purple-500/20">
+                        <img src="https://i.ibb.co.com/RkWwN5jC/GRAND-SHOT.png" alt="Project 3" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-3 py-1 bg-pink-500/20 text-pink-300 text-xs rounded-full">FPS</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Grand Shot</h3>
+                        <p class="text-gray-400">shooting and shooting practice.</p>
+                    </div>
+                </div>
+
+                <!-- Project Card 4 -->
+                <div class="group relative overflow-hidden rounded-2xl bg-dark border border-white/5 card-hover">
+                    <div class="aspect-video overflow-hidden bg-gradient-to-br from-purple-500/20 to-blue-500/20">
+                        <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?w=600&h=400&fit=crop" alt="Project 4" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-3 py-1 bg-purple-500/20 text-purple-300 text-xs rounded-full">Obby</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Coming Soon</h3>
+                        <p class="text-gray-400">Full-featured inventory dengan drag & drop, item sorting, dan database integration.</p>
+                    </div>
+                </div>
+
+                <!-- Project Card 5 -->
+                <div class="group relative overflow-hidden rounded-2xl bg-dark border border-white/5 card-hover">
+                    <div class="aspect-video overflow-hidden bg-gradient-to-br from-blue-500/20 to-pink-500/20">
+                        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=600&h=400&fit=crop" alt="Project 5" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs rounded-full">Adventure</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Coming Soon</h3>
+                        <p class="text-gray-400">Futuristic cityscape dengan neon lights, interactive elements, dan atmospheric effects.</p>
+                    </div>
+                </div>
+
+                <!-- Project Card 6 -->
+                <div class="group relative overflow-hidden rounded-2xl bg-dark border border-white/5 card-hover">
+                    <div class="aspect-video overflow-hidden bg-gradient-to-br from-pink-500/20 to-blue-500/20">
+                        <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=600&h=400&fit=crop" alt="Project 6" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="px-3 py-1 bg-pink-500/20 text-pink-300 text-xs rounded-full">Obby</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Coming Soon</h3>
+                        <p class="text-gray-400">Robust multiplayer system dengan sync optimization dan anti-cheat protection.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-32 bg-pattern relative">
+        <div class="section-number">04</div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 mb-4">
+                    <span class="text-sm gradient-text font-semibold">FAQ</span>
+                </span>
+                <h2 class="text-5xl lg:text-6xl font-bold mb-6">
+                    Pertanyaan Yang<br/>
+                    <span class="gradient-text">Sering Ditanyakan</span>
+                </h2>
+            </div>
+
+            <div class="max-w-3xl mx-auto space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="faq-item gradient-border rounded-2xl p-6 cursor-pointer" onclick="toggleFAQ(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-bold pr-8">Berapa lama waktu pengerjaan project?</h3>
+                        <svg class="faq-icon w-6 h-6 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer text-gray-400">
+                        Waktu pengerjaan bervariasi tergantung kompleksitas project. Map sederhana bisa 3-7 hari, script custom 5-14 hari, dan project besar bisa 2-4 minggu. Kami akan berikan timeline detail setelah konsultasi awal.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="faq-item gradient-border rounded-2xl p-6 cursor-pointer" onclick="toggleFAQ(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-bold pr-8">Apakah ada garansi revisi?</h3>
+                        <svg class="faq-icon w-6 h-6 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer text-gray-400">
+                        Ya! Setiap project mendapat 2x revisi gratis. Untuk revisi tambahan atau perubahan major scope, akan dikenakan biaya tambahan sesuai kesepakatan. Kami juga provide support 30 hari untuk bug fixing.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="faq-item gradient-border rounded-2xl p-6 cursor-pointer" onclick="toggleFAQ(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-bold pr-8">Bagaimana sistem pembayaran?</h3>
+                        <svg class="faq-icon w-6 h-6 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer text-gray-400">
+                        Kami menggunakan sistem 50% DP dan 50% pelunasan sebelum delivery. Untuk project besar (>10 juta), bisa dicicil per milestone. Payment via transfer bank, e-wallet, atau crypto.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="faq-item gradient-border rounded-2xl p-6 cursor-pointer" onclick="toggleFAQ(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-bold pr-8">Apakah bisa konsultasi gratis dulu?</h3>
+                        <svg class="faq-icon w-6 h-6 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer text-gray-400">
+                        Tentu! Konsultasi awal gratis untuk discuss ide, scope project, dan estimasi budget. Hubungi kami via WhatsApp, Discord, atau email untuk schedule consultation call.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="faq-item gradient-border rounded-2xl p-6 cursor-pointer" onclick="toggleFAQ(this)">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-bold pr-8">Platform apa saja yang didukung?</h3>
+                        <svg class="faq-icon w-6 h-6 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    <div class="faq-answer text-gray-400">
+                        Kami fokus pada Roblox development (Luau).
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="py-32 bg-dark/30 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-blue-500/10"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="inline-block px-4 py-2 rounded-full border border-purple-500/30 bg-purple-500/10 mb-6">
+                    <span class="text-sm gradient-text font-semibold">Ready to Start?</span>
+                </div>
+                <h2 class="text-5xl lg:text-6xl font-bold mb-6">
+                    Mari Wujudkan<br/>
+                    <span class="gradient-text">Ide Anda</span>
+                </h2>
+                <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
+                    Punya ide? Butuh konsultasi? Atau sekedar mau ngobrol tentang development? Hit us up!
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#" class="px-10 py-5 gradient-bg rounded-full font-bold text-lg hover:shadow-2xl hover:shadow-purple-500/50 transition-all inline-flex items-center gap-3">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                        WhatsApp
+                    </a>
+                    <a href="#" class="px-10 py-5 border-2 border-white/20 rounded-full font-bold text-lg hover:bg-white/5 transition-all inline-flex items-center gap-3">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0 a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                        Discord
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer with Glassmorphism -->
+    <footer class="glass-footer rounded-t-3xl mx-4 mb-4 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Brand -->
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <!-- Ganti URL ini dengan logo Anda -->
+                        <img src="https://i.ibb.co.com/1G7vdrpK/kstdw.png" alt="Kyuzen Studio Logo" class="footer-logo-img rounded-lg">
+                        <span class="text-lg font-bold gradient-text">Kyuzen Studio</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Setiap proyek dimulai dengan sebuah cerita. Kami mengubah cerita-cerita itu menjadi pengalaman digital yang terasa mudah dan ekspresif.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+                            </svg>
+                        </a>
+                        <a href="" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#home" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Services</a></li>
+                        <li><a href="#projects" class="hover:text-white transition-colors">Portfolio</a></li>
+                        <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Free Models -->
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Free Resources</h4>
+                    <p class="text-gray-400 text-sm mb-3">Get free models untuk project Anda</p>
+                    <a href="" class="inline-flex items-center gap-2 px-4 py-2 gradient-bg rounded-lg text-sm font-semibold hover:shadow-lg transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        Get Models
+                    </a>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="pt-8 border-t border-white/5 text-center text-gray-500 text-sm">
+                <p>&copy; 2025 Kyuzen Studio. Semua hak dilindungi undang-undang.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        // FAQ toggle
+        function toggleFAQ(element) {
+            const allItems = document.querySelectorAll('.faq-item');
+            allItems.forEach(item => {
+                if (item !== element) {
+                    item.classList.remove('active');
+                }
+            });
+            element.classList.toggle('active');
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    document.getElementById('mobileMenu').classList.remove('active');
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.animate-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>
